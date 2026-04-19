@@ -1,10 +1,14 @@
 import streamlit as st
-import joblib
+import pickle
 
-# Load model & vectorizer
+# Load model and vectorizer
 try:
-    model = joblib.load("model.pkl")
-    vectorizer = joblib.load("vectorizer.pkl")
+    with open("model.pkl", "rb") as f:
+        model = pickle.load(f)
+
+    with open("vectorizer.pkl", "rb") as f:
+        vectorizer = pickle.load(f)
+
 except Exception as e:
     st.error(f"Error loading files: {e}")
     st.stop()
@@ -16,7 +20,7 @@ st.write("Enter news text below:")
 # Input
 text = st.text_area("News Text")
 
-# Predict button
+# Prediction
 if st.button("Predict"):
     if text.strip() != "":
         vec = vectorizer.transform([text])
