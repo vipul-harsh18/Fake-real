@@ -1,6 +1,1 @@
-fake-news-app/
-│
-├── app.py              ✅ (code likhna hai)
-├── model.pkl           ✅ (auto generate)
-├── vectorizer.pkl      ✅ (auto generate)
-├── requirements.txt    ✅ (3 lines likhni hai)
+
