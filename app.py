@@ -1,12 +1,13 @@
 import streamlit as st
-import pickle
+import joblib
 
 # Load model & vectorizer
-with open("model.pkl", "rb") as f:
-    model = pickle.load(f)
-
-with open("vectorizer.pkl", "rb") as f:
-    vectorizer = pickle.load(f)
+try:
+    model = joblib.load("model.pkl")
+    vectorizer = joblib.load("vectorizer.pkl")
+except Exception as e:
+    st.error(f"Error loading files: {e}")
+    st.stop()
 
 # UI
 st.title("📰 Fake News Detection App")
