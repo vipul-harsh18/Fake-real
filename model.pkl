@@ -1,35 +1,42 @@
 import pandas as pd
 import pickle
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
 
-fake = pd.read_csv(r"C:\Users\virat\Downloads\fake_news.csv")
-true = pd.read_csv(r"C:\Users\virat\Downloads\real_news.csv")
+# Load data
+fake = pd.read_csv("fake_news.csv")
+true = pd.read_csv("real_news.csv")
 
+# Labels
 fake["label"] = 0
 true["label"] = 1
 
+# Combine
 data = pd.concat([fake, true])
-data.columns = data.columns.str.lower()
 
+# Clean
+data.columns = data.columns.str.lower()
 data["title"] = data["title"].fillna("")
 data["text"] = data["text"].fillna("")
-
 data["content"] = data["title"] + " " + data["text"]
 
-from sklearn.model_selection import train_test_split
+# Split
 X = data["content"]
 y = data["label"]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y)
 
-from sklearn.feature_extraction.text import TfidfVectorizer
+# Vectorizer
 vectorizer = TfidfVectorizer()
-
 X_train = vectorizer.fit_transform(X_train)
 
-from sklearn.linear_model import LogisticRegression
+# Model
 model = LogisticRegression()
 model.fit(X_train, y_train)
 
-# Save
+# Save files
 pickle.dump(model, open("model.pkl", "wb"))
 pickle.dump(vectorizer, open("vectorizer.pkl", "wb"))
+
+print("Model saved successfully!")
