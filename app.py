@@ -2,23 +2,28 @@ import streamlit as st
 import pickle
 
 # Load model & vectorizer
-model = pickle.load(open("model.pkl", "rb"))
-vectorizer = pickle.load(open("vectorizer.pkl", "rb"))
+with open("model.pkl", "rb") as f:
+    model = pickle.load(f)
 
-st.title("Fake News Detector")
+with open("vectorizer.pkl", "rb") as f:
+    vectorizer = pickle.load(f)
 
-# User input
-input_text = st.text_area("Enter News Text")
+# UI
+st.title("📰 Fake News Detection App")
+st.write("Enter news text below:")
 
-# Button
-if st.button("Check"):
-    if input_text.strip() != "":
-        vec = vectorizer.transform([input_text])
+# Input
+text = st.text_area("News Text")
+
+# Predict button
+if st.button("Predict"):
+    if text.strip() != "":
+        vec = vectorizer.transform([text])
         result = model.predict(vec)
 
         if result[0] == 0:
-            st.error("Fake News ❌")
+            st.error("❌ Fake News")
         else:
-            st.success("Real News ✅")
+            st.success("✅ Real News")
     else:
         st.warning("Please enter some text")
